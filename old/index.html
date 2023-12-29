@@ -1,0 +1,67 @@
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+		<title>Space Invaders</title>
+		<script type="text/javascript" src="js/Sonidos.js"></script>
+		<script type="text/javascript" src="js/Sprites.js"></script>
+		<script type="text/javascript" src="js/Entidad.js"></script>
+		<script type="text/javascript" src="js/EntidadNave.js"></script>
+		<script type="text/javascript" src="js/EntidadDisparo.js"></script>
+		<script type="text/javascript" src="js/EntidadAlien.js"></script>
+		<script type="text/javascript" src="js/Juego.js"></script>
+		<script>
+			var temporizador;
+			var juego;
+			function inicio(){
+				Sonidos.cargando=function(actual,total){
+					log("cargando sonido "+actual+"/"+total);
+				};
+				Sonidos.completadoTotal=function(){
+					juego=new Juego();
+				
+					//Enlazamos los eventos de teclado
+					document.onkeydown=function(e){
+						juego.pulsarTecla(e);
+					};
+					document.onkeyup=function(e){
+						juego.soltarTecla(e);
+					};
+					
+					juego.constructor("contexto");
+					temporizador=setInterval("juego.controlLoop();",25);
+				};
+				Sonidos.cargar(	[["disparo","sonido/shoot.wav"],
+								["explosion","sonido/invaderkilled.wav"],
+								["nota1","sonido/fastinvader1.wav"],
+								["nota2","sonido/fastinvader2.wav"],
+								["nota3","sonido/fastinvader3.wav"],
+								["nota4","sonido/fastinvader4.wav"],
+								["victoria","sonido/victoria.wav"],
+								["derrota","sonido/derrota.mp3"]]);
+			}
+			function log(texto,nueva){
+				var capa=document.getElementById("log");
+				if (nueva)
+					capa.innerHTML+="<br/>"+texto;
+				else
+					capa.innerHTML=texto;
+			}
+			function parar(){
+				clearInterval(temporizador);
+			}
+		</script>
+	</head>
+
+	<body onload="inicio();">
+		<canvas id="contexto"></canvas>
+		<br/>
+		<ul>
+			<li><code>Cursores</code> para mover la nave de izquierda a derecha.
+			<li><code>Espacio</code> para disparar.
+			<li><code>Enter</code> para empezar de nuevo cuando finalice la partida.
+		</ul>
+		<button onclick="parar();">Parar</button>
+		<div id="log"></div>
+		
+	</body>
+</html>
